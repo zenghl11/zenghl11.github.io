@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>SmartCity</title>
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        html,body {
+            height:100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="map" style="position:relative;left:0px;top:0px;right:0px;bottom:0px;"></div>
+    <script src="js/jquery.js"></script>
+    <!--<script src="js/skyline.js"></script>-->
+    <script>
+        function createInstance(divID) {
+            var obj = document.getElementById("SGWorld");
+            if (!obj) {
+                obj = document.createElement("object");
+                obj.setAttribute("id", "SGWorld");
+                obj.setAttribute("name", "SGWorld");//sgworld
+                //CLSID:3A4F9199-65A8-11D5-85C1-0001023952C1  66
+                obj.setAttribute("classid", "CLSID:3A4F919C-65A8-11D5-85C1-0001023952C1");
+                obj.setAttribute("style", "display:none;height:0px");
+                document.getElementById(divID) ? document.getElementById(divID).appendChild(obj) : document.body.appendChild(obj);
+            }
+            return obj;
+        }
+        function init() {
+            $("#map").append('<div id="map3d"><object id="TE" ' +
+                               'classid="CLSID:3a4f9192-65a8-11d5-85c1-0001023952c1" ' +
+                               'width="100%" height="100%" ></object></div>');
+            $("#TE").css("height", $(window).height());
+            $(window).resize(function () {               
+                $("#TE").css("height", $(window).height());
+            });
+        }
+        function initMap() {
+            $("#map").append('<div id="map3d"><object id="TEX" ' +
+                               'classid="CLSID:3a4f9196-65a8-11d5-85c1-0001023952c1" ' +
+                               'width="100%" height="100%" ></object></div>');
+            $("#TEX").css("height", $(window).height());
+            $(window).resize(function () {
+                $("#TEX").css("height", $(window).height());
+            });
+            SGWorld = $("#TEX").get(0).CreateInstance("TerraExplorerX.SGWorld701");
+        }
+        $(function () {
+            //initMap();
+            init();
+            setTimeout(function () {
+                if (SGWorld==undefined) {
+                    SGWorld = createInstance("map3d");
+                }
+                SGWorld.AttachEvent("OnLoadFinished", event_OnLoadFinished);
+                SGWorld.Open("");
+            }, 1);
+        });
+    </script>
+</body>
+</html>
